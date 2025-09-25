@@ -1,15 +1,5 @@
 import hashlib
 
-# conta de exemplo pra puxar dado
-conta = {
-    "id": 1,
-    "nome_conta": "Joao",
-    "email": "joao@email.com",
-    "telefone": "11987654321",
-    "senha": hashlib.sha256("123456".encode()).hexdigest(),
-    "cargo": "caixa"
-}
-
 tipos_conta = [
     "admin",
     "gerente",
@@ -20,53 +10,108 @@ tipos_conta = [
     "tecnico_ti"
 ]
 
-print("\nConta atual:")
-for k, v in conta.items():
-    if k == "senha":
-        print(f"{k}: {v[:10]}... ")
-    else:
-        print(f"{k}: {v}")
+conta = {
+    "id": 1,
+    "nome_conta": "Joao",
+    "email": "joao@email.com",
+    "telefone": "11987654321",
+    "cpf": "12345678901",
+    "contato_extra": "11912345678",
+    "descricao": "Funcionário exemplo do setor de caixa.",
+    "imagem_url": "http://exemplo.com/foto.jpg",
+    "senha": hashlib.sha256("123456".encode()).hexdigest(),
+    "cargo": "caixa"
+}
 
-print("\n--- Editar Conta ---")
+def formatar_cpf(cpf: str) -> str:
+    if len(cpf) == 11:
+        return cpf[:3] + "*" * 6 + cpf[-2:]
+    return cpf
 
-novo_nome = input("Novo nome (ou Enter para manter): ").strip()
-if novo_nome and 1 <= len(novo_nome) <= 50:
-    conta["nome_conta"] = novo_nome
+def formatar_tel(telefone: str) -> str:
+    if len(telefone) == 11 and telefone.isdigit():
+        return f"({telefone[:2]}) {telefone[2:]}"
+    return telefone
 
-novo_email = input("Novo email (ou Enter para manter): ").strip()
-if novo_email and 1 <= len(novo_email) <= 100:
-    conta["email"] = novo_email
+def validar_email(email: str) -> bool:
+    if "@" not in email:
+        return False
+    parte_local = email.split("@")[0]
+    return len(parte_local) >= 3
 
-while True:
-    novo_tel = input("Novo telefone (11 dígitos, ou Enter para manter): ").strip()
-    if not novo_tel:
-        break
-    if novo_tel.isdigit() and len(novo_tel) == 11:
-        conta["telefone"] = novo_tel
-        break
-    else:
-        print("Telefone inválido!")
+def login(conta: dict) -> bool:
+    print("\n--- Login ---")
+    email = input("Email: ").strip()
+    senha = input("Senha: ").strip()
+    senha_hash = hashlib.sha256(senha.encode()).hexdigest()
+    if email == conta["email"] and senha_hash == conta["senha"]:
+        print("Login bem-sucedido!")
+        return True
+    print("Email ou senha incorretos!")
+    return False
 
-nova_senha = input("Nova senha (6-50 caracteres, ou Enter para manter): ").strip()
-if nova_senha:
-    if 6 <= len(nova_senha) <= 50:
-        conta["senha"] = hashlib.sha256(nova_senha.encode()).hexdigest()
-    else:
-        print("Senha inválida! Mantida a anterior.")
+def editar_conta(conta: dict) -> dict:
+    print("\n--- Editar Conta ---")
+    
+    def input_edit(prompt, atual, max_len=None, only_digits=False, min_len=None):
+        while True:
+            valor = input(f"{prompt} [{atual}]: ").strip()
+            if valor == "":
+                return atual
+            if only_digits and not valor.isdigit():
+                print("Somente números são aceitos!")
+                continue
+            if min_len and len(valor) < min_len:
+                print(f"Não cumpre o mínimo de {min_len} caracteres!")
+                continue
+            if max_len and len(valor) > max_len:
+                print("Muito longo!")
+                continue
+            return valor
 
-print("\nSelecione o cargo (ou Enter para manter):")
-for i, tipo in enumerate(tipos_conta, start=1):
-    print(f"{i} - {tipo}")
+    conta["nome_conta"] = input_edit("Nome", conta["nome_conta"], max_len=50, min_len=1)
+    
+    while True:
+        email = input_edit("Email", conta["email"], max_len=100)
+        if validar_email(email):
+            conta["email"] = email
+            break
+        print("Email inválido!")
 
-opcao = input("Digite o número da opção: ").strip()
-if opcao.isdigit():
-    opcao = int(opcao)
+    conta["telefone"] = input_edit("Telefone", conta["telefone"], max_len=11, min_len=11, only_digits=True)
+    conta["cpf"] = input_edit("CPF", conta["cpf"], max_len=11, min_len=11, only_digits=True)
+    conta["contato_extra"] = input_edit("Contato extra", conta["contato_extra"], max_len=100)
+    conta["descricao"] = input_edit("Descrição", conta["descricao"], max_len=200)
+    conta["imagem_url"] = input_edit("URL da imagem", conta["imagem_url"], max_len=500)
+
+    senha_nova = input("Nova senha (deixe em branco para manter atual): ").strip()
+    if senha_nova:
+        if 6 <= len(senha_nova) <= 50:
+            conta["senha"] = hashlib.sha256(senha_nova.encode()).hexdigest()
+        else:
+            print("Senha inválida, mantendo a atual!")
+
+    print("\nSelecione o cargo:")
+    for i, tipo in enumerate(tipos_conta, start=1):
+        print(f"{i} - {tipo}")
+    try:
+        opcao = int(input(f"Número da opção [{tipos_conta.index(conta['cargo']) + 1}]: ").strip() or (tipos_conta.index(conta['cargo']) + 1))
+    except ValueError:
+        opcao = tipos_conta.index(conta['cargo']) + 1
     if 1 <= opcao <= len(tipos_conta):
         conta["cargo"] = tipos_conta[opcao - 1]
 
-print("\nConta editada com sucesso!\n")
-for k, v in conta.items():
-    if k == "senha":
-        print(f"{k}: {v[:10]}... (hash)")
-    else:
-        print(f"{k}: {v}")
+    return conta
+
+if login(conta):
+    conta = editar_conta(conta)
+    print("\n--- Conta Atualizada ---")
+    for k, v in conta.items():
+        if k == "senha":
+            print(f"{k}: {v[:10]}")
+        elif k == "cpf":
+            print(f"{k}: {formatar_cpf(v)}")
+        elif k == "telefone":
+            print(f"{k}: {formatar_tel(v)}")
+        else:
+            print(f"{k}: {v}")
