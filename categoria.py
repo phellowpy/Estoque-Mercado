@@ -30,7 +30,7 @@ def criar_categoria():
     categorias.append(categoria)
 
     print("\nCategoria cadastrada com sucesso!")
-    print(f"Categoria -> ID: {categoria_id}, Nome: {nome}, Descrição: {descricao}, Marca associada ID: {marca_id}")
+    print(f"ID Categoria: {categoria_id}, ID Marca: {marca_id}, Nome: {nome}, Descrição: {descricao}")
 
 criar_categoria()
 

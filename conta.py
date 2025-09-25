@@ -64,7 +64,7 @@ if opcao.isdigit():
     if 1 <= opcao <= len(tipos_conta):
         conta["cargo"] = tipos_conta[opcao - 1]
 
-print("\n✅ Conta editada com sucesso!\n")
+print("\nConta editada com sucesso!\n")
 for k, v in conta.items():
     if k == "senha":
         print(f"{k}: {v[:10]}... (hash)")
