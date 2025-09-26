@@ -1,6 +1,5 @@
 from datetime import datetime
 
-# Produtos pré-cadastrados
 produtos = [
     {"id_produto": 1, "nome_produto": "Arroz", "preco": 20.0},
     {"id_produto": 2, "nome_produto": "Feijão", "preco": 10.0},
@@ -9,19 +8,16 @@ produtos = [
 
 promocoes = []
 
-# Função para gerar ID de promoção
 def gerar_id(lista, chave="id_promocao"):
     if not lista:
         return 1
     return max(item[chave] for item in lista) + 1
 
-# Cadastro de promoção
 def cadastrar_promocao():
     print("\n--- Produtos Disponíveis ---")
     for produto in produtos:
         print(f"{produto['id_produto']}: {produto['nome_produto']} (Preço: {produto['preco']})")
 
-    # Selecionar produto
     while True:
         try:
             id_produto = int(input("Digite o ID do produto para a promoção: "))
@@ -32,20 +28,17 @@ def cadastrar_promocao():
         except ValueError:
             print("Digite um ID válido.")
 
-    # Título da promoção
     while True:
         titulo = input("Título da promoção: ").strip()
         if 1 <= len(titulo) <= 150:
             break
         print("Título inválido (máx 150 caracteres).")
 
-    # Descrição da promoção
     descricao = input("Descrição da promoção: ").strip()
     if len(descricao) > 150:
         descricao = descricao[:150]
         print("Descrição cortada para 150 caracteres.")
 
-    # Preço promocional
     while True:
         try:
             preco_promocional = float(input(f"Preço promocional (produto atual {produto_selecionado['preco']}): ").replace(",", "."))
@@ -55,7 +48,6 @@ def cadastrar_promocao():
         except ValueError:
             print("Digite um valor válido.")
 
-    # Datas da promoção
     while True:
         data_inicio = input("Data de início (YYYY-MM-DD HH:MM): ").strip()
         data_fim = input("Data de fim (YYYY-MM-DD HH:MM): ").strip()
@@ -68,7 +60,6 @@ def cadastrar_promocao():
         except ValueError:
             print("Formato de data inválido. Use YYYY-MM-DD HH:MM")
 
-    # Criar promoção
     promocao_id = gerar_id(promocoes)
     promocao = {
         "id_promocao": promocao_id,
@@ -85,7 +76,6 @@ def cadastrar_promocao():
     for k, v in promocao.items():
         print(f"{k}: {v}")
 
-# Loop principal
 while True:
     cadastrar_promocao()
     continuar = input("\nDeseja cadastrar outra promoção? (s/n): ").strip().lower()
