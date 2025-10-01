@@ -12,7 +12,6 @@
     <script src="../js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Permissão: Acesso total para a maioria das ações, exceto 'promoção' que pode ser para CAIXA.
             verificarAutorizacao(['admin', 'gerente', 'supervisor', 'estoquista', 'comprador', 'caixa']); 
             carregarFormularioGestao();
         });
@@ -96,7 +95,7 @@
                         </div>
                     </div>
                     <div class="row">
-                         <div class="col-md-4 mb-3">
+                           <div class="col-md-4 mb-3">
                             <label for="categoria" class="form-label">Categoria</label>
                             <input type="text" class="form-control" id="categoria">
                         </div>
@@ -177,7 +176,6 @@
             
             document.getElementById('page-title').textContent = `${acao.toUpperCase()} - ${produtoAtual.nome}`;
 
-            // Esconde todos os campos e mostra apenas o necessário
             document.getElementById('campos-edicao-geral').style.display = 'none';
             document.getElementById('campos-movimentacao').style.display = 'none';
             document.getElementById('campos-promocao').style.display = 'none';
@@ -188,7 +186,6 @@
                     document.getElementById('campos-edicao-geral').style.display = 'block';
                     submitButton.textContent = 'Salvar Edição';
                     
-                    // Preenche campos de Edição
                     document.getElementById('nome').value = produtoAtual.nome;
                     document.getElementById('preco').value = produtoAtual.preco;
                     document.getElementById('categoria').value = produtoAtual.categoria;
@@ -200,7 +197,6 @@
                     document.getElementById('campos-movimentacao').style.display = 'block';
                     submitButton.textContent = 'Registrar Movimentação';
                     
-                    // Lógica para alterar a label do motivo
                     document.getElementById('tipo-movimento').addEventListener('change', (e) => {
                         const labelMotivo = document.getElementById('label-motivo');
                         if (e.target.value === 'ENTRADA') {
@@ -215,7 +211,6 @@
                     document.getElementById('campos-promocao').style.display = 'block';
                     submitButton.textContent = 'Atualizar Promoção';
                     
-                    // Preenche campo de Promoção
                     document.getElementById('status-promocao').checked = produtoAtual.promocao;
                     break;
                 default:
@@ -233,20 +228,18 @@
             
             switch (acaoAtual) {
                 case 'editar':
-                    // Lógica de Edição de Produto (SIMULAÇÃO)
                     const nome = document.getElementById('nome').value;
                     const preco = document.getElementById('preco').value;
                     mensagem = `Produto **${produtoAtual.id}** editado. Nome: **${nome}**, Preço: **R$ ${parseFloat(preco).toFixed(2)}** (SIMULAÇÃO)`;
                     break;
                 case 'movimentar':
-                    // Lógica de Movimentação de Estoque (SIMULAÇÃO)
                     const tipoMovimento = document.getElementById('tipo-movimento').value;
                     const quantidade = document.getElementById('quantidade-movimento').value;
                     const motivo = document.getElementById('motivo-movimento').value;
                     const estoqueNovo = tipoMovimento === 'ENTRADA' ? 
-                                       produtoAtual.estoque + parseInt(quantidade) : 
-                                       produtoAtual.estoque - parseInt(quantidade);
-                                       
+                                         produtoAtual.estoque + parseInt(quantidade) : 
+                                         produtoAtual.estoque - parseInt(quantidade);
+                                         
                     if (estoqueNovo < 0) {
                          feedbackDiv.classList.add('alert-danger');
                          feedbackDiv.textContent = `Erro! A saída de ${quantidade} unidades excede o estoque atual (${produtoAtual.estoque}).`;
@@ -255,7 +248,6 @@
                     mensagem = `Movimentação de **${tipoMovimento}** registrada: **${quantidade}** unidades do produto **${produtoAtual.id}**. Novo estoque: ${estoqueNovo} (SIMULAÇÃO)`;
                     break;
                 case 'promocao':
-                    // Lógica de Alteração de Promoção (SIMULAÇÃO)
                     const statusPromocao = document.getElementById('status-promocao').checked;
                     mensagem = `Status de promoção do produto **${produtoAtual.id}** alterado para: **${statusPromocao ? 'ATIVO' : 'INATIVO'}** (SIMULAÇÃO)`;
                     break;
@@ -264,11 +256,9 @@
             feedbackDiv.classList.add('alert-success');
             feedbackDiv.innerHTML = mensagem;
             
-            // Limpa o formulário após a simulação (exceto campos de edição)
             if (acaoAtual === 'movimentar') {
                 document.getElementById('gestao-form').reset();
             }
-            // Não redireciona automaticamente para que o usuário possa ver o feedback.
         });
     </script>
 </body>

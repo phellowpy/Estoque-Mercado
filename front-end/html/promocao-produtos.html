@@ -163,24 +163,19 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/app.js"></script>
     <script>
-        
-        // =========================================================
-        // FUNÇÕES DE EXIBIÇÃO E LÓGICA DA PÁGINA
-        // =========================================================
 
         const modalPromocaoElement = document.getElementById('modalPromocao');
         const tabelaBody = document.getElementById('tabela-promocoes');
         const promocaoSwitch = document.getElementById('promocaoSwitch');
         const camposPromocao = document.getElementById('camposPromocao');
         const btnSalvar = document.getElementById('btnSalvarPromocao');
-        
-        // Função utilitária para formatar moeda
+
         const formatarMoeda = (valor) => valor ? parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) : 'N/A';
         const formatarData = (data) => data ? new Date(data + 'T00:00:00').toLocaleDateString('pt-BR') : 'Sem Prazo';
 
 
         function renderizarTabela() {
-            const produtos = buscarProdutos(); // Função do app.js
+            const produtos = buscarProdutos(); 
             tabelaBody.innerHTML = '';
             
             produtos.forEach(produto => {
@@ -211,20 +206,16 @@
             const produto = buscarProdutoPorId(produtoId);
             if (!produto) return;
 
-            // Preenche dados base
             document.getElementById('produtoIdModal').value = produto.id;
             document.getElementById('produtoNomeModal').textContent = produto.nome;
 
             const isPromocao = produto.promocao || false;
             promocaoSwitch.checked = isPromocao;
 
-            // Preenche os campos específicos da promoção
-            // Nota: O input[type="date"] espera o formato YYYY-MM-DD
             document.getElementById('precoPromocional').value = produto.precoPromocional || '';
             document.getElementById('dataInicioPromocao').value = produto.dataInicioPromocao || '';
             document.getElementById('dataFimPromocao').value = produto.dataFimPromocao || '';
 
-            // Garante que a visibilidade esteja correta ao abrir o modal
             camposPromocao.style.display = isPromocao ? 'block' : 'none';
         }
 
@@ -241,7 +232,6 @@
                 const dataInicio = document.getElementById('dataInicioPromocao').value;
                 const dataFim = document.getElementById('dataFimPromocao').value;
                 
-                // Validação de campos obrigatórios se a promoção estiver ativa
                 if (!precoPromocional || !dataInicio) {
                     exibirMensagemModal("Erro de Validação", "Preço Promocional e Data de Início são obrigatórios.", 'alert-warning');
                     return;
@@ -251,48 +241,35 @@
                 dadosParaSalvar.dataInicioPromocao = dataInicio;
                 dadosParaSalvar.dataFimPromocao = dataFim || null;
             } else {
-                // Se desativar a promoção, limpa todos os campos promocionais
                 dadosParaSalvar.precoPromocional = null;
                 dadosParaSalvar.dataInicioPromocao = null;
                 dadosParaSalvar.dataFimPromocao = null;
             }
             
-            // Chama a função de atualização do app.js
             if (atualizarProduto(produtoId, dadosParaSalvar)) {
-                renderizarTabela(); // Atualiza a tabela na tela
+                renderizarTabela(); 
                 exibirMensagemModal("Sucesso", "Promoção do produto atualizada!", 'alert-success');
-                // Fecha o modal após o sucesso
                 bootstrap.Modal.getInstance(modalPromocaoElement).hide(); 
             } else {
                 exibirMensagemModal("Erro", "Não foi possível atualizar o produto. ID inválido.", 'alert-danger');
             }
         }
 
-        // =========================================================
-        // EVENT LISTENERS E INICIALIZAÇÃO
-        // =========================================================
-
         document.addEventListener('DOMContentLoaded', () => {
-            // Verifica a autorização (exemplo: Gerente, Admin, Comprador)
             if (!verificarAutorizacao(['admin', 'gerente', 'comprador'])) {
                  return; 
             }
             
             renderizarTabela();
-
-            // Evento: Mostra/esconde campos de promoção ao alternar o switch
             promocaoSwitch.addEventListener('change', function() {
                 camposPromocao.style.display = this.checked ? 'block' : 'none';
             });
-            
-            // Evento: Carrega os dados no modal quando ele for aberto
             modalPromocaoElement.addEventListener('show.bs.modal', (event) => {
                 const button = event.relatedTarget;
                 const productId = button.getAttribute('data-product-id');
                 carregarDadosModal(productId);
             });
-            
-            // Evento: Salva os dados ao clicar no botão 'Salvar Alterações'
+
             btnSalvar.addEventListener('click', salvarPromocao);
         });
     </script>

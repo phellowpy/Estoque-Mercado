@@ -14,7 +14,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             verificarAutorizacao(['admin', 'gerente', 'supervisor', 'estoquista', 'comprador']); 
-            carregarMovimentacoes(); // Garante o carregamento da lista
+            carregarMovimentacoes(); 
         });
     </script>
     
@@ -159,7 +159,6 @@
             const tabelaBody = document.getElementById('lista-movimentacoes');
             tabelaBody.innerHTML = '';
 
-            // Limita a 3 itens para ser uma "Visão Geral"
             movimentacoes.slice(0, 3).forEach(mov => {
                 const tr = document.createElement('tr');
                 const tipoCor = mov.tipo === 'ENTRADA' ? 'success' : 'danger';

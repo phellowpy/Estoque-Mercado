@@ -12,7 +12,6 @@
     <script src="../js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Permissão: Acesso restrito a cargos que lidam com finanças/compras
             verificarAutorizacao(['admin', 'gerente', 'comprador', 'financeiro']); 
             carregarRelatorioCustos(buscarProdutos()); 
         });
@@ -112,16 +111,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Função para SIMULAR dados de custo (pois não estão no app.js original)
         function simularDadosCusto(produto) {
             let custo = 0;
-            // Simulação baseada no preço de venda
             if (produto.preco > 10) {
-                custo = produto.preco * 0.65; // Margem de 35%
+                custo = produto.preco * 0.65; 
             } else if (produto.preco > 5) {
-                custo = produto.preco * 0.75; // Margem de 25%
+                custo = produto.preco * 0.75; 
             } else {
-                custo = produto.preco * 0.8;  // Margem de 20%
+                custo = produto.preco * 0.8;  
             }
             return parseFloat(custo.toFixed(2));
         }

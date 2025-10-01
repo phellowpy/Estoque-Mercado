@@ -13,9 +13,8 @@
     <script src="../js/app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Permissão: Acesso a 'admin', 'gerente', 'comprador', 'tecnico_ti'
             verificarAutorizacao(['admin', 'gerente', 'comprador', 'tecnico_ti']); 
-            carregarListaGeral(buscarProdutos()); // Carrega a lista completa ao iniciar
+            carregarListaGeral(buscarProdutos()); 
         });
     </script>
     
@@ -139,7 +138,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Função que carrega e renderiza a tabela com base em um array de produtos
         function carregarListaGeral(produtos) {
             const tabelaBody = document.getElementById('lista-produtos-geral');
             tabelaBody.innerHTML = '';
@@ -170,16 +168,15 @@
             });
         }
         
-        // NOVA FUNÇÃO: Filtra os produtos ao digitar na barra de pesquisa
         function filtrarProdutosGeral() {
             const termo = document.getElementById('search-input-geral').value.toLowerCase();
-            const todosProdutos = buscarProdutos(); // Pega a lista completa do app.js
+            const todosProdutos = buscarProdutos(); 
             
             const produtosFiltrados = todosProdutos.filter(produto => 
                 produto.nome.toLowerCase().includes(termo)
             );
 
-            carregarListaGeral(produtosFiltrados); // Recarrega a tabela com os resultados filtrados
+            carregarListaGeral(produtosFiltrados); 
         }
     </script>
 </body>

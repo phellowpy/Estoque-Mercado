@@ -14,7 +14,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             verificarAutorizacao();
-            carregarDetalhesProduto(); // Chama a função para garantir o carregamento correto
+            carregarDetalhesProduto(); 
         });
     </script>
     
@@ -112,8 +112,7 @@
 
             const detalhesDiv = document.getElementById('produto-detalhes');
             const nomeHeader = document.getElementById('produto-nome-header');
-            
-            // Novos elementos de link
+
             const linkEditar = document.getElementById('link-editar');
             const linkMovimentar = document.getElementById('link-movimentar'); 
             const linkPromocao = document.getElementById('link-promocao');
@@ -125,8 +124,7 @@
             }
 
             nomeHeader.textContent = produto.nome;
-            
-            // ATUALIZAÇÃO: Define os links com os parâmetros corretos
+
             linkEditar.href = `produto-gestao.html?id=${produto.id}&acao=editar`;
             linkMovimentar.href = `produto-gestao.html?id=${produto.id}&acao=movimentar`;
             linkPromocao.href = `produto-gestao.html?id=${produto.id}&acao=promocao`;

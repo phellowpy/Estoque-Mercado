@@ -66,17 +66,14 @@
 <script src="../js/app.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // Verifica se já está logado
         if (typeof getUsuarioLogado !== 'undefined' && getUsuarioLogado()) { 
              window.location.href = 'estoque-produtos.html';
         }
 
-        // Chama a função de atualização de ícone do tema (do app.js)
         const isDarkModeEnabled = localStorage.getItem('darkMode') === 'enabled';
         if (isDarkModeEnabled && !document.body.classList.contains('dark-mode')) {
              document.body.classList.add('dark-mode');
         }
-        // Garante que o ícone inicial do tema (na navbar) esteja correto
         if (typeof atualizarIconeTema !== 'undefined') {
             atualizarIconeTema(isDarkModeEnabled); 
         }
@@ -85,17 +82,14 @@
     document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // IDs corrigidos para usar os IDs originais do seu HTML: 'email' e 'password'
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value.trim();
         
         const errorDiv = document.getElementById('login-error');
 
-        // Chama a função CORRETA do app.js: fazerLogin()
         const usuario = fazerLogin(email, password);
 
         if (usuario) {
-            // Login bem-sucedido: Esconde o erro e mostra o modal de sucesso
             errorDiv.classList.add('d-none');
             exibirMensagemModal("Sucesso!", `Bem-vindo(a), ${usuario.nome}.`, 'alert-success');
             
@@ -103,7 +97,6 @@
                 window.location.href = 'estoque-produtos.html'; 
             }, 1500);
         } else {
-            // Login falhou: Mostra o modal de erro (e a div de erro, por garantia)
             errorDiv.classList.remove('d-none');
             exibirMensagemModal("Erro de Login", "Credenciais inválidas. Verifique seu email e senha.", 'alert-danger');
         }

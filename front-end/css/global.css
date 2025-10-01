@@ -1,9 +1,6 @@
 :root {
-    /* CORES PRINCIPAIS (TEMA CLARO AGRADÁVEL E VERDE MILITAR) */
     --primary-color: #4CAF50; 
     --primary-hover: #45a049; 
-    
-    /* TEMA CLARO SUAVE */
     --body-bg: #f9f9f7; 
     --card-bg: #ffffff; 
     --text-color: #333333; 
@@ -35,11 +32,8 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     color: var(--primary-color) !important;
 }
 
-/* CARDS E MODAIS */
-/* Aplica o destaque VERDE MILITAR automaticamente a todos os cards */
 .card, .modal-content {
     background-color: var(--card-bg);
-    /* Borda lateral de destaque para dar o efeito "chamativo" sem mexer no HTML */
     border: none !important;
     border-left: 5px solid var(--primary-color) !important; 
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
@@ -90,7 +84,7 @@ h1, h2, h3, h4, h5, h6, .navbar-brand {
     color: var(--text-color);
 }
 
-/* DARK MODE */
+/* TODO DARK MODE */
 .dark-mode {
     --body-bg: #181a1f; 
     --card-bg: #25282f;
