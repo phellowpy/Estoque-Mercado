@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento Geral de Produtos - Sistema de Estoque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/fornecimento.css"> 
+</head>
+<body>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Permissão: Acesso a 'admin', 'gerente', 'comprador', 'tecnico_ti'
+            verificarAutorizacao(['admin', 'gerente', 'comprador', 'tecnico_ti']); 
+            carregarListaGeral(buscarProdutos()); // Carrega a lista completa ao iniciar
+        });
+    </script>
+    
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="estoque-produtos.html">
+            <img src="../arquivos/img/logo_keepinventory.png" alt="Logo KeepInventory" height="60" class="me-2"> 
+            KeepInventory
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="estoque-produtos.html">
+                        <i class="bi bi-box-seam"></i> Produtos
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="fornecimento.html">
+                        <i class="bi bi-truck"></i> Fornecimento
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link active" href="geral-produto.html">
+                        <i class="bi bi-bar-chart-line"></i> Geral Produto
+                    </a>
+                </li>
+                
+                <li class="nav-item" id="nav-cadastro" style="display: none;">
+                    <a class="nav-link" href="cadastro.html">
+                        <i class="bi bi-person-plus"></i> Cadastro
+                    </a>
+                </li>
+            </ul>
+            
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="conta.html">
+                        <i class="bi bi-person-circle"></i> Minha Conta
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <button class="btn nav-link" id="btn-toggle-darkmode" onclick="toggleDarkMode()">
+                        <i class="bi bi-moon-stars"></i> Tema
+                    </button>
+                </li>
+                
+                <li class="nav-item">
+                    <button class="btn nav-link" onclick="fazerLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="container mt-4">
+        <h2 class="mb-4">Gerenciamento Geral de Produtos</h2>
+        
+        <div class="row">
+            <div class="col-md-3 col-sm-6 mb-3">
+                <a href="categoria-itens.html" class="option-box">
+                    <i class="bi bi-grid"></i>
+                    <h4>Categoria de Itens</h4>
+                    <p>Revisar e editar as categorias.</p>
+                </a>
+            </div>
+            
+            <div class="col-md-3 col-sm-6 mb-3">
+                <a href="lista-marcas.html" class="option-box">
+                    <i class="bi bi-bookmark"></i>
+                    <h4>Marca</h4>
+                    <p>Revisar e editar marcas.</p>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+                <a href="promocao-produtos.html" class="option-box">
+                    <i class="bi bi-tag-fill"></i>
+                    <h4>Promoção Produtos</h4>
+                    <p>Ativar/Desativar Ofertas</p>
+                </a>
+            </div>
+
+            <div class="col-md-3 col-sm-6 mb-3">
+                <a href="atualizacao-produtos.html" class="option-box">
+                    <i class="bi bi-database-up"></i>
+                    <h4>Atualização de Produtos</h4>
+                    <p>Edição rápida de preço, localização, etc.</p>
+                </a>
+            </div>
+            </div>
+
+        <h3 class="mt-5">Produtos para Atualização Rápida</h3>
+        
+        <div class="mb-3">
+            <div class="input-group">
+                <span class="input-group-text"><i class="bi bi-search"></i></span>
+                <input type="text" class="form-control" id="search-input-geral" onkeyup="filtrarProdutosGeral()" placeholder="Pesquisar produto pelo nome...">
+            </div>
+        </div>
+        <div class="card p-3">
+            <p class="text-secondary">Selecione um produto para ver/alterar suas informações detalhadas:</p>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr><th>ID</th><th>Nome</th><th>Preço</th><th>Promoção</th><th>Ação</th></tr>
+                    </thead>
+                    <tbody id="lista-produtos-geral">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Função que carrega e renderiza a tabela com base em um array de produtos
+        function carregarListaGeral(produtos) {
+            const tabelaBody = document.getElementById('lista-produtos-geral');
+            tabelaBody.innerHTML = '';
+            
+            if (produtos.length === 0) {
+                 tabelaBody.innerHTML = '<tr><td colspan="5" class="text-center">Nenhum produto encontrado.</td></tr>';
+                 return;
+            }
+
+            produtos.forEach(produto => {
+                const tr = document.createElement('tr');
+                const promoBadge = produto.promocao ? 
+                                   '<span class="badge bg-danger">SIM</span>' : 
+                                   '<span class="badge bg-secondary">NÃO</span>';
+                                   
+                tr.innerHTML = `
+                    <td>${produto.id}</td>
+                    <td>${produto.nome}</td>
+                    <td>R$ ${produto.preco.toFixed(2).replace('.', ',')}</td>
+                    <td>${promoBadge}</td>
+                    <td>
+                        <a href="produto.html?id=${produto.id}" class="btn btn-sm btn-militar">
+                            <i class="bi bi-gear"></i> Gerenciar
+                        </a>
+                    </td>
+                `;
+                tabelaBody.appendChild(tr);
+            });
+        }
+        
+        // NOVA FUNÇÃO: Filtra os produtos ao digitar na barra de pesquisa
+        function filtrarProdutosGeral() {
+            const termo = document.getElementById('search-input-geral').value.toLowerCase();
+            const todosProdutos = buscarProdutos(); // Pega a lista completa do app.js
+            
+            const produtosFiltrados = todosProdutos.filter(produto => 
+                produto.nome.toLowerCase().includes(termo)
+            );
+
+            carregarListaGeral(produtosFiltrados); // Recarrega a tabela com os resultados filtrados
+        }
+    </script>
+</body>
+</html>

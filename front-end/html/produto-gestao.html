@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Gerenciar Produto - Sistema de Estoque</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="../css/global.css">
+</head>
+<body>
+    <script src="../js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Permissão: Acesso total para a maioria das ações, exceto 'promoção' que pode ser para CAIXA.
+            verificarAutorizacao(['admin', 'gerente', 'supervisor', 'estoquista', 'comprador', 'caixa']); 
+            carregarFormularioGestao();
+        });
+    </script>
+    
+<nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="estoque-produtos.html">
+            <img src="../arquivos/img/logo_keepinventory.png" alt="Logo KeepInventory" height="60" class="me-2"> 
+            KeepInventory
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" href="estoque-produtos.html">
+                        <i class="bi bi-box-seam"></i> Produtos
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link" href="fornecimento.html">
+                        <i class="bi bi-truck"></i> Fornecimento
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <a class="nav-link active" href="geral-produto.html">
+                        <i class="bi bi-bar-chart-line"></i> Geral Produto
+                    </a>
+                </li>
+                
+                <li class="nav-item" id="nav-cadastro" style="display: none;">
+                    <a class="nav-link" href="cadastro.html">
+                        <i class="bi bi-person-plus"></i> Cadastro
+                    </a>
+                </li>
+            </ul>
+            
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="conta.html">
+                        <i class="bi bi-person-circle"></i> Minha Conta
+                    </a>
+                </li>
+                
+                <li class="nav-item">
+                    <button class="btn nav-link" id="btn-toggle-darkmode" onclick="toggleDarkMode()">
+                        <i class="bi bi-moon-stars"></i> Tema
+                    </button>
+                </li>
+                
+                <li class="nav-item">
+                    <button class="btn nav-link" onclick="fazerLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Sair
+                    </button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+    <div class="container mt-4">
+        <h2 class="mb-4" id="form-header">Gerenciar Produto</h2>
+        <h4 id="produto-info" class="mb-4 text-secondary"></h4>
+
+        <div class="card p-4">
+            <form id="gestao-form">
+                
+                <div id="campos-edicao-geral" style="display: none;">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="nome" class="form-label">Nome do Produto</label>
+                            <input type="text" class="form-control" id="nome">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="preco" class="form-label">Preço de Venda (R$)</label>
+                            <input type="number" class="form-control" id="preco" step="0.01">
+                        </div>
+                    </div>
+                    <div class="row">
+                         <div class="col-md-4 mb-3">
+                            <label for="categoria" class="form-label">Categoria</label>
+                            <input type="text" class="form-control" id="categoria">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control" id="marca">
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="localizacao" class="form-label">Localização no Estoque</label>
+                            <input type="text" class="form-control" id="localizacao">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="campos-movimentacao" style="display: none;">
+                    <div class="mb-3">
+                        <label for="tipo-movimento" class="form-label">Tipo de Movimento</label>
+                        <select class="form-select" id="tipo-movimento">
+                            <option value="ENTRADA">ENTRADA (Recebimento)</option>
+                            <option value="SAIDA">SAÍDA (Venda, Perda, Consumo)</option>
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="quantidade-movimento" class="form-label">Quantidade</label>
+                            <input type="number" class="form-control" id="quantidade-movimento" min="1" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="motivo-movimento" class="form-label" id="label-motivo">Fornecedor / Setor de Destino</label>
+                            <input type="text" class="form-control" id="motivo-movimento" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="campos-promocao" style="display: none;">
+                    <div class="mb-3 form-check form-switch">
+                        <input class="form-check-input" type="checkbox" role="switch" id="status-promocao">
+                        <label class="form-check-label" for="status-promocao">Produto está em promoção?</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-militar w-100 mt-4" id="submit-button">Salvar Alterações</button>
+                <div id="form-feedback" class="alert mt-3 d-none"></div>
+            </form>
+        </div>
+        
+        <a href="#" id="link-voltar" class="btn btn-outline-secondary mt-3">Voltar para Detalhes do Produto</a>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let produtoAtual = null; 
+        let acaoAtual = null; 
+
+        function carregarFormularioGestao() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const produtoId = urlParams.get('id');
+            const acao = urlParams.get('acao');
+            
+            produtoAtual = buscarProdutoPorId(produtoId);
+            acaoAtual = acao;
+
+            const header = document.getElementById('form-header');
+            const info = document.getElementById('produto-info');
+            const formContainer = document.getElementById('gestao-form');
+            const submitButton = document.getElementById('submit-button');
+            const linkVoltar = document.getElementById('link-voltar');
+
+            if (!produtoAtual) {
+                header.textContent = 'Erro: Produto Não Encontrado';
+                info.textContent = '';
+                formContainer.style.display = 'none';
+                return;
+            }
+            
+            linkVoltar.href = `produto.html?id=${produtoId}`;
+            info.textContent = `Produto: ${produtoAtual.nome} (ID: ${produtoAtual.id}) - Estoque Atual: ${produtoAtual.estoque}`;
+            
+            document.getElementById('page-title').textContent = `${acao.toUpperCase()} - ${produtoAtual.nome}`;
+
+            // Esconde todos os campos e mostra apenas o necessário
+            document.getElementById('campos-edicao-geral').style.display = 'none';
+            document.getElementById('campos-movimentacao').style.display = 'none';
+            document.getElementById('campos-promocao').style.display = 'none';
+
+            switch (acao) {
+                case 'editar':
+                    header.textContent = 'Editar Informações Gerais do Produto';
+                    document.getElementById('campos-edicao-geral').style.display = 'block';
+                    submitButton.textContent = 'Salvar Edição';
+                    
+                    // Preenche campos de Edição
+                    document.getElementById('nome').value = produtoAtual.nome;
+                    document.getElementById('preco').value = produtoAtual.preco;
+                    document.getElementById('categoria').value = produtoAtual.categoria;
+                    document.getElementById('marca').value = produtoAtual.marca;
+                    document.getElementById('localizacao').value = produtoAtual.localizacao;
+                    break;
+                case 'movimentar':
+                    header.textContent = 'Movimentar Estoque';
+                    document.getElementById('campos-movimentacao').style.display = 'block';
+                    submitButton.textContent = 'Registrar Movimentação';
+                    
+                    // Lógica para alterar a label do motivo
+                    document.getElementById('tipo-movimento').addEventListener('change', (e) => {
+                        const labelMotivo = document.getElementById('label-motivo');
+                        if (e.target.value === 'ENTRADA') {
+                            labelMotivo.textContent = 'Fornecedor';
+                        } else {
+                            labelMotivo.textContent = 'Setor de Destino / Motivo (Venda, Perda)';
+                        }
+                    });
+                    break;
+                case 'promocao':
+                    header.textContent = 'Alterar Status de Promoção';
+                    document.getElementById('campos-promocao').style.display = 'block';
+                    submitButton.textContent = 'Atualizar Promoção';
+                    
+                    // Preenche campo de Promoção
+                    document.getElementById('status-promocao').checked = produtoAtual.promocao;
+                    break;
+                default:
+                    header.textContent = 'Ação Inválida ou Não Especificada';
+                    formContainer.style.display = 'none';
+            }
+        }
+        
+        document.getElementById('gestao-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const feedbackDiv = document.getElementById('form-feedback');
+            feedbackDiv.classList.remove('d-none', 'alert-success', 'alert-danger');
+            
+            let mensagem = '';
+            
+            switch (acaoAtual) {
+                case 'editar':
+                    // Lógica de Edição de Produto (SIMULAÇÃO)
+                    const nome = document.getElementById('nome').value;
+                    const preco = document.getElementById('preco').value;
+                    mensagem = `Produto **${produtoAtual.id}** editado. Nome: **${nome}**, Preço: **R$ ${parseFloat(preco).toFixed(2)}** (SIMULAÇÃO)`;
+                    break;
+                case 'movimentar':
+                    // Lógica de Movimentação de Estoque (SIMULAÇÃO)
+                    const tipoMovimento = document.getElementById('tipo-movimento').value;
+                    const quantidade = document.getElementById('quantidade-movimento').value;
+                    const motivo = document.getElementById('motivo-movimento').value;
+                    const estoqueNovo = tipoMovimento === 'ENTRADA' ? 
+                                       produtoAtual.estoque + parseInt(quantidade) : 
+                                       produtoAtual.estoque - parseInt(quantidade);
+                                       
+                    if (estoqueNovo < 0) {
+                         feedbackDiv.classList.add('alert-danger');
+                         feedbackDiv.textContent = `Erro! A saída de ${quantidade} unidades excede o estoque atual (${produtoAtual.estoque}).`;
+                         return;
+                    }
+                    mensagem = `Movimentação de **${tipoMovimento}** registrada: **${quantidade}** unidades do produto **${produtoAtual.id}**. Novo estoque: ${estoqueNovo} (SIMULAÇÃO)`;
+                    break;
+                case 'promocao':
+                    // Lógica de Alteração de Promoção (SIMULAÇÃO)
+                    const statusPromocao = document.getElementById('status-promocao').checked;
+                    mensagem = `Status de promoção do produto **${produtoAtual.id}** alterado para: **${statusPromocao ? 'ATIVO' : 'INATIVO'}** (SIMULAÇÃO)`;
+                    break;
+            }
+            
+            feedbackDiv.classList.add('alert-success');
+            feedbackDiv.innerHTML = mensagem;
+            
+            // Limpa o formulário após a simulação (exceto campos de edição)
+            if (acaoAtual === 'movimentar') {
+                document.getElementById('gestao-form').reset();
+            }
+            // Não redireciona automaticamente para que o usuário possa ver o feedback.
+        });
+    </script>
+</body>
+</html>

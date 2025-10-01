@@ -1,0 +1,55 @@
+:root {
+    --bg-principal-dark: #212529; 
+    --bg-secundario-dark: #343a40; 
+    --cor-principal-light: #adb5bd; 
+    --cor-borda-dark: #6c757d; 
+    --cor-sucesso-dark: #49574d; 
+}
+
+body.dark-mode {
+    background-color: var(--bg-principal-dark);
+    color: var(--cor-principal-light);
+}
+
+.dark-mode .navbar {
+    background-color: var(--bg-secundario-dark) !important;
+    border-bottom: 1px solid var(--cor-borda-dark);
+}
+
+.dark-mode .navbar-brand, .dark-mode .nav-link {
+    color: var(--cor-principal-light) !important;
+}
+
+.dark-mode .card {
+    background-color: var(--bg-secundario-dark);
+    border: 1px solid var(--cor-borda-dark);
+    color: var(--cor-principal-light);
+}
+
+.dark-mode .card-header {
+    background-color: var(--bg-principal-dark);
+    border-bottom: 1px solid var(--cor-borda-dark);
+}
+
+.dark-mode .table {
+    --bs-table-bg: var(--bg-secundario-dark);
+    --bs-table-color: var(--cor-principal-light);
+    --bs-table-border-color: var(--cor-borda-dark);
+}
+
+.dark-mode .table-hover > tbody > tr:hover {
+    --bs-table-accent-bg: #495057; 
+}
+
+.dark-mode .form-control, .dark-mode .form-select {
+    background-color: var(--bg-principal-dark);
+    color: var(--cor-principal-light);
+    border: 1px solid var(--cor-borda-dark);
+}
+
+.dark-mode .form-control:focus, .dark-mode .form-select:focus {
+    background-color: var(--bg-principal-dark);
+    color: var(--cor-principal-light);
+    border-color: var(--cor-sucesso-dark);
+    box-shadow: 0 0 0 0.25rem rgba(73, 87, 77, 0.25);
+}

@@ -1,0 +1,7 @@
+.produto-info {
+    padding: 20px;
+}
+
+.produto-detalhe h4 {
+    color: var(--cor-destaque);
+}

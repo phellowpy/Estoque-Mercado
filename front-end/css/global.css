@@ -1,0 +1,129 @@
+:root {
+    /* CORES PRINCIPAIS (TEMA CLARO AGRADÁVEL E VERDE MILITAR) */
+    --primary-color: #4CAF50; 
+    --primary-hover: #45a049; 
+    
+    /* TEMA CLARO SUAVE */
+    --body-bg: #f9f9f7; 
+    --card-bg: #ffffff; 
+    --text-color: #333333; 
+    --border-color: #dddddd; 
+    --secondary-text: #6c757d; 
+}
+
+body {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    color: var(--text-color);
+}
+
+.navbar {
+    background-color: var(--card-bg);
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.nav-link {
+    color: var(--text-color);
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+/* CARDS E MODAIS */
+/* Aplica o destaque VERDE MILITAR automaticamente a todos os cards */
+.card, .modal-content {
+    background-color: var(--card-bg);
+    /* Borda lateral de destaque para dar o efeito "chamativo" sem mexer no HTML */
+    border: none !important;
+    border-left: 5px solid var(--primary-color) !important; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); 
+    transform: translateY(-2px);
+}
+
+.form-control, .input-group-text {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    border-color: #AAAAA9;
+    box-shadow: 0 0 0 0.25rem rgba(170, 170, 169, 0.25);
+}
+
+.btn-militar {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #ffffff !important;
+}
+.btn-militar:hover {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.table {
+    --bs-table-bg: var(--card-bg);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: var(--border-color);
+}
+
+.table-hover > tbody > tr:hover {
+    --bs-table-hover-bg: #f0f0ee;
+    color: var(--text-color);
+}
+
+.alert-info, .alert-light {
+    background-color: #eff3f7;
+    border-color: #c7d8e8;
+    color: var(--text-color);
+}
+
+/* DARK MODE */
+.dark-mode {
+    --body-bg: #181a1f; 
+    --card-bg: #25282f;
+    --text-color: #f0f0f0;
+    --border-color: #44474f;
+    --secondary-text: #adb5bd;
+    
+    --primary-color: #6ed071; 
+    --primary-hover: #5cb85f;
+}
+
+.dark-mode .navbar {
+    background-color: var(--card-bg);
+    border-bottom-color: var(--border-color);
+}
+
+.dark-mode .nav-link {
+    color: var(--text-color);
+}
+
+.dark-mode .table-hover > tbody > tr:hover {
+    --bs-table-hover-bg: #2a2e36;
+}
+
+.dark-mode .card, .dark-mode .modal-content {
+    /* Mantém o destaque no Dark Mode */
+    border: none !important;
+    border-left: 5px solid var(--primary-color) !important; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+}
+
+.dark-mode .alert-danger {
+    color: #ffb3b3;
+    background-color: #4a1d1d;
+    border-color: #6a2a2a;
+}

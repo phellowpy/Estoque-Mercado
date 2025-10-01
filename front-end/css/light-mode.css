@@ -1,0 +1,63 @@
+:root {
+    --body-bg: #f9f9f7; 
+    --card-bg: #ffffff; 
+    --text-color: #333333; 
+    --border-color: #dddddd; 
+    --primary-color: #4CAF50; 
+}
+
+body {
+    background-color: var(--body-bg) !important;
+    color: var(--text-color) !important;
+    text-rendering: optimizeLegibility; 
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    color: var(--text-color) !important;
+}
+
+.navbar {
+    background-color: var(--card-bg) !important;
+    border-bottom: 1px solid var(--border-color);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.03);
+}
+
+.table {
+    --bs-table-bg: var(--card-bg);
+    --bs-table-color: var(--text-color);
+    --bs-table-border-color: var(--border-color);
+}
+
+.table-hover > tbody > tr:hover {
+    --bs-table-hover-bg: #f0f0ee;
+    color: var(--text-color);
+}
+
+.form-control, .input-group-text {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+    color: var(--text-color);
+}
+
+.form-control:focus {
+    border-color: #AAAAA9;
+    box-shadow: 0 0 0 0.25rem rgba(170, 170, 169, 0.25);
+}
+
+.alert-info, .alert-light {
+    background-color: #eff3f7;
+    border-color: #c7d8e8;
+    color: #333333;
+}
+
+.btn-militar {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #ffffff !important;
+}
